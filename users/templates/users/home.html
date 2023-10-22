@@ -1,0 +1,137 @@
+{% extends 'users/base.html' %}
+{% block title %}Home{% endblock %}
+
+
+{% block body %}
+{% load static %}
+
+<div class="container">
+    {% for msg in messages %}
+        <div class="alert alert-{{msg.level_tag}} alert-dismissible fade show  name" role="alert" >
+          <strong> {{msg.message}}</strong>
+          <button type="button" class="btn-close name1" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    
+        {% endfor %} 
+
+        <a href="{% url 'Logout' %}" style="float: right; margin-bottom: 20px;" class="btn btn-success">Logout</a>
+
+
+
+        <!-- start -->
+
+     
+          <h1>Select Soil Type and Duration</h1>
+        
+          <label for="soilSelect">Soil:</label>
+          <select id="soilSelect">
+            <option value="clay">Clay</option>
+            <option value="silt">Silt</option>
+            <option value="sand">Sand</option>
+            <option value="loam">Loam</option>
+          </select>
+        
+          <br /><br />
+        
+          <h2>Recommended Duration for <span id="recommendedSoil">clay</span> Soil: <span id="recommendedDuration">short</span></h2>
+        
+          <br /><br />
+        
+          <h2>Recommended Crops for <span id="selectedSoil">clay</span> Soil and <span id="selectedDuration">short</span> Duration:</h2>
+          <select id="cropSelect">
+            <option value="">Select a crop</option>
+          </select>
+        
+          <br /><br />
+        
+          <button id="sendSMSButton">Send SMS</button>
+          <p id="messageSent"></p>
+        
+          <script>
+            const soilSelect = document.getElementById("soilSelect");
+            const recommendedSoil = document.getElementById("recommendedSoil");
+            const recommendedDuration = document.getElementById("recommendedDuration");
+            const selectedSoil = document.getElementById("selectedSoil");
+            const selectedDuration = document.getElementById("selectedDuration");
+            const cropSelect = document.getElementById("cropSelect");
+            const sendSMSButton = document.getElementById("sendSMSButton");
+            const messageSent = document.getElementById("messageSent");
+        
+            const recommendations = {
+              clay: {
+                short: ['Tomatoes', 'Potatoes', 'Cabbage'],
+                medium: ['Zucchini', 'Pumpkins', 'Peppers'],
+                long: ['Squash', 'Watermelons', 'Cantaloupes'],
+              },
+              silt: {
+                short: ['Beans', 'Peas', 'Broccoli'],
+                medium: ['Cauliflower', 'Kale', 'Spinach'],
+                long: ['Cucumbers', 'Peppers', 'Eggplants'],
+              },
+              sand: {
+                short: ['Carrots', 'Radishes', 'Cucumbers'],
+                medium: ['Corn', 'Strawberries', 'Tomatoes'],
+                long: ['Squash', 'Watermelons', 'Cantaloupes'],
+              },
+              loam: {
+                short: ['Lettuce', 'Spinach', 'Kale'],
+                medium: ['Corn', 'Pumpkins', 'Carrots'],
+                long: ['Cabbage', 'Broccoli', 'Cauliflower'],
+              },
+            };
+        
+            function constructMessage() {
+              return `Recommended crop for ${selectedSoil.textContent} soil and ${selectedDuration.textContent} duration: ${cropSelect.value}`;
+            }
+        
+            function updateCropOptions() {
+              const soil = selectedSoil.textContent;
+              const duration = selectedDuration.textContent;
+              const recommendedCrops = recommendations[soil] && recommendations[soil][duration];
+        
+              while (cropSelect.firstChild) {
+                cropSelect.removeChild(cropSelect.firstChild);
+              }
+        
+              const defaultOption = document.createElement("option");
+              defaultOption.value = "";
+              defaultOption.textContent = "Select a crop";
+              cropSelect.appendChild(defaultOption);
+        
+              if (recommendedCrops) {
+                recommendedCrops.forEach((crop) => {
+                  const option = document.createElement("option");
+                  option.value = crop;
+                  option.textContent = crop;
+                  cropSelect.appendChild(option);
+                });
+              }
+            }
+        
+            soilSelect.addEventListener("change", function () {
+              selectedSoil.textContent = soilSelect.value;
+              recommendedSoil.textContent = soilSelect.value;
+              updateCropOptions();
+            });
+        
+            cropSelect.addEventListener("change", function () {
+              selectedDuration.textContent = recommendedDuration.textContent;
+            });
+        
+            sendSMSButton.addEventListener("click", function () {
+              const message = constructMessage();
+              const phoneNumber = '254757450716'; // Replace with your phone number
+              const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+              window.location.href = smsLink;
+              messageSent.textContent = `Message sent to ${phoneNumber}`;
+            });
+        
+            // Initialize the crop options
+            updateCropOptions();
+          </script>
+        
+
+        <!-- end -->
+</div>
+
+{% endblock %}

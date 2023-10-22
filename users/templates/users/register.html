@@ -1,0 +1,30 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+{% load static %}
+
+    <div class="box">
+        <h2 style="text-align: center; color: #555;">AGRITECH</h2>    
+        {% if forms.errors %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                                {% for key, error in forms.errors.items %}
+                                                <strong>{{ error }}</strong>
+                                    {% endfor %}
+                <button type="button" class="btn-close name1" data-bs-dismiss="alert" aria-label="close"></button>
+            </div>
+
+    {% endif %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% for form in forms %}
+            {{form.label}}
+            {{form}}
+            {% endfor %}
+            <button class="btn btn-success">Register</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'signin' %}">Login</a></p>
+    </div>
+
+{% endblock %}

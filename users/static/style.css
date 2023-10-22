@@ -1,0 +1,24 @@
+.box{
+    width: 350px;
+    height: auto;
+    box-shadow: 2px 2px 10px black;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    position: absolute;
+    padding: 10px;
+    border-radius: 40px 10px 40px 10px;
+}
+input{
+    width: 100%;
+    height: 35px;
+    margin: 5px auto;
+    border-radius: 20px 5px 20px 5px;
+    outline: none;
+    padding-left: 5px;
+    border: 2px solid #555;
+}
+.box a{
+    text-decoration: none;
+    color: blue;
+}

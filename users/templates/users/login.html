@@ -1,0 +1,26 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+{% load static %}
+
+    <div class="box">
+        <h2 style="text-align: center; color: #555;">AGRITECH</h2>   
+        {% for msg in messages %}
+        <div class="alert alert-{{msg.level_tag}} alert-dismissible fade show  name" role="alert" >
+          <strong> {{msg.message}}</strong>
+          <button type="button" class="btn-close name1" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    
+        {% endfor %} 
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Enter Username" required>
+            <input type="password" name="password" placeholder="Enter password" required>
+            <button type="submit" class="btn btn-success">Login</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'register' %}">Register</a></p>
+    </div>
+
+{% endblock %}
